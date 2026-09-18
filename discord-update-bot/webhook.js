@@ -1,5 +1,3 @@
-// STEAK SMP update bot
-
 const express = require("express");
 
 const app = express();
