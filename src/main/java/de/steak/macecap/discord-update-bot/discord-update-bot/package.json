@@ -1,1 +1,12 @@
-
+{
+  "name": "steak-smp-update-bot",
+  "version": "1.0.0",
+  "description": "STEAK SMP GitHub to Discord update bot",
+  "main": "webhook.js",
+  "scripts": {
+    "start": "node webhook.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
