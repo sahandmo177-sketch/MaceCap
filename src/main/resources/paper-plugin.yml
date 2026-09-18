@@ -1,1 +1,5 @@
-
+name: MaceCap
+version: 1.0.0
+main: de.steak.macecap.MaceCap
+api-version: '26.2'
+description: Begrenzung des Mace-Schadens auf 6.5
