@@ -1,6 +1,5 @@
 plugins {
     java
-    id("io.papermc.paperweight.userdev") version "2.0.0-SNAPSHOT"
 }
 
 group = "de.steak"
@@ -12,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("26.2.build.+")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 }
 
 java {
