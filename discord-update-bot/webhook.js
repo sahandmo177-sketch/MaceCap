@@ -1,3 +1,4 @@
+```javascript
 const express = require("express");
 
 const app = express();
@@ -18,7 +19,6 @@ app.post("/github", async (req, res) => {
         }
 
         const payload = req.body;
-        const repository = payload.repository?.name || "MaceCap";
         const commits = payload.commits || [];
 
         if (commits.length === 0) {
@@ -28,8 +28,7 @@ app.post("/github", async (req, res) => {
         const changes = commits
             .slice(0, 8)
             .map(commit => {
-                const message = commit.message.split("\n")[0].trim();
-                return `• ${message}`;
+                return `• ${commit.message.split("\n")[0].trim()}`;
             })
             .join("\n");
 
@@ -39,8 +38,8 @@ app.post("/github", async (req, res) => {
                 {
                     title: "🔨 STEAK SMP Update",
                     description:
-                        `**New update pushed to ${repository}!**\n\n` +
-                        `📋 **Changes:**\n${changes}`,
+                        "📋 **Changes:**\n\n" +
+                        changes,
                     footer: {
                         text: "STEAK SMP • Automatic Update System"
                     }
@@ -61,6 +60,7 @@ app.post("/github", async (req, res) => {
             return res.status(500).send("Discord error");
         }
 
+        console.log("Discord update sent successfully!");
         res.status(200).send("OK");
 
     } catch (error) {
@@ -76,3 +76,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log(`STEAK SMP Update Bot running on port ${PORT}`);
 });
+```
