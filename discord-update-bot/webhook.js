@@ -14,12 +14,10 @@ app.post("/github", async (req, res) => {
         }
 
         if (!DISCORD_WEBHOOK_URL) {
-            console.error("DISCORD_WEBHOOK_URL is missing!");
             return res.status(500).send("Discord webhook is not configured");
         }
 
         const payload = req.body;
-
         const repository = payload.repository?.name || "MaceCap";
         const commits = payload.commits || [];
 
@@ -30,10 +28,7 @@ app.post("/github", async (req, res) => {
         const changes = commits
             .slice(0, 8)
             .map(commit => {
-                const message = commit.message
-                    .split("\n")[0]
-                    .trim();
-
+                const message = commit.message.split("\n")[0].trim();
                 return `• ${message}`;
             })
             .join("\n");
@@ -66,7 +61,6 @@ app.post("/github", async (req, res) => {
             return res.status(500).send("Discord error");
         }
 
-        console.log("Discord update sent successfully!");
         res.status(200).send("OK");
 
     } catch (error) {
