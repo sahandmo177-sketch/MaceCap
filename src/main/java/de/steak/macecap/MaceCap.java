@@ -13,7 +13,12 @@ public final class MaceCap extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
+
+        Bounty bounty = new Bounty();
+        getServer().getPluginManager().registerEvents(bounty, this);
+
         getLogger().info("MaceCap aktiviert - Maximum: 6.5 Schaden");
+        getLogger().info("Bounty-System aktiviert!");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
