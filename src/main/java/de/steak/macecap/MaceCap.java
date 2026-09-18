@@ -34,12 +34,16 @@ public final class MaceCap extends JavaPlugin implements Listener {
         getLogger().info("MaceCap aktiviert - Maximum: 6.5 Schaden");
 
         registerShulkerRecipe();
+        registerGappleRecipe();
 
         getLogger().info("Bounty-System aktiviert!");
-        getLogger().info("Custom Shulker-Rezept aktiviert!");
+        getLogger().info("Custom Rezepte aktiviert!");
     }
 
-    // Mace-Schaden auf maximal 6.5 begrenzen
+    // =========================
+    // MACE DAMAGE CAP
+    // =========================
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event) {
         String type = event.getDamageSource().getDamageType().key().value();
@@ -49,7 +53,10 @@ public final class MaceCap extends JavaPlugin implements Listener {
         }
     }
 
-    // Bounty-System
+    // =========================
+    // BOUNTY SYSTEM
+    // =========================
+
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent event) {
         Player killed = event.getEntity();
@@ -59,7 +66,7 @@ public final class MaceCap extends JavaPlugin implements Listener {
             return;
         }
 
-        // Wenn der getötete Spieler eine Bounty hatte
+        // Hat der getötete Spieler eine Bounty?
         if (bounties.contains(killed.getUniqueId())) {
             bounties.remove(killed.getUniqueId());
 
@@ -68,17 +75,23 @@ public final class MaceCap extends JavaPlugin implements Listener {
 
             killer.sendMessage("§6§lBOUNTY! §r§aDu hast die Bounty von §e"
                     + killed.getName() + " §ageholt!");
-            killer.sendMessage("§7Belohnung: §f" + reward.getType().name());
+
+            killer.sendMessage("§7Belohnung: §f"
+                    + reward.getType().name());
         }
 
-        // Der Killer bekommt selbst eine Bounty
+        // Der Killer bekommt jetzt selbst eine Bounty
         bounties.add(killer.getUniqueId());
 
         killer.sendMessage("§c§l⚔ BOUNTY! §r§eDu hast jetzt eine Bounty!");
     }
 
-    // Zufällige Netherite-Belohnung
+    // =========================
+    // BOUNTY REWARD
+    // =========================
+
     private ItemStack createRandomReward() {
+
         Material[] rewards = {
                 Material.NETHERITE_SWORD,
                 Material.NETHERITE_AXE,
@@ -91,18 +104,25 @@ public final class MaceCap extends JavaPlugin implements Listener {
                 Material.NETHERITE_BOOTS
         };
 
-        Material material = rewards[random.nextInt(rewards.length)];
+        Material material =
+                rewards[random.nextInt(rewards.length)];
+
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
+
             // Rüstung bekommt Protection III
             if (material.name().contains("HELMET")
                     || material.name().contains("CHESTPLATE")
                     || material.name().contains("LEGGINGS")
                     || material.name().contains("BOOTS")) {
 
-                meta.addEnchant(Enchantment.PROTECTION, 3, true);
+                meta.addEnchant(
+                        Enchantment.PROTECTION,
+                        3,
+                        true
+                );
             }
 
             item.setItemMeta(meta);
@@ -111,16 +131,22 @@ public final class MaceCap extends JavaPlugin implements Listener {
         return item;
     }
 
-    // Eigenes Shulker-Box-Rezept
-    private void registerShulkerRecipe() {
-        NamespacedKey key = new NamespacedKey(this, "custom_shulker_box");
+    // =========================
+    // CUSTOM SHULKER RECIPE
+    // =========================
 
-        // Altes Rezept entfernen, falls vorhanden
+    private void registerShulkerRecipe() {
+
+        NamespacedKey key =
+                new NamespacedKey(this, "custom_shulker_box");
+
         Bukkit.removeRecipe(key);
 
-        ItemStack result = new ItemStack(Material.SHULKER_BOX);
+        ItemStack result =
+                new ItemStack(Material.SHULKER_BOX);
 
-        ShapedRecipe recipe = new ShapedRecipe(key, result);
+        ShapedRecipe recipe =
+                new ShapedRecipe(key, result);
 
         recipe.shape(
                 " C ",
@@ -130,6 +156,34 @@ public final class MaceCap extends JavaPlugin implements Listener {
 
         recipe.setIngredient('C', Material.CHEST);
         recipe.setIngredient('D', Material.DIAMOND_BLOCK);
+
+        Bukkit.addRecipe(recipe);
+    }
+
+    // =========================
+    // CUSTOM GOLDEN APPLE RECIPE
+    // =========================
+
+    private void registerGappleRecipe() {
+
+        NamespacedKey key =
+                new NamespacedKey(this, "custom_golden_apple");
+
+        Bukkit.removeRecipe(key);
+
+        // Gibt 2 Golden Apples
+        ItemStack result =
+                new ItemStack(Material.GOLDEN_APPLE, 2);
+
+        ShapedRecipe recipe =
+                new ShapedRecipe(key, result);
+
+        recipe.shape(
+                "GAG"
+        );
+
+        recipe.setIngredient('G', Material.GOLD_INGOT);
+        recipe.setIngredient('A', Material.APPLE);
 
         Bukkit.addRecipe(recipe);
     }
